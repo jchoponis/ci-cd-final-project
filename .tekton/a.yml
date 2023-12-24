@@ -1,4 +1,3 @@
----
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -33,28 +32,3 @@ spec:
           # Delete files and directories starting with .. plus any other character
           rm -rf "${WORKSPACE_SOURCE_PATH}"/..?*
         fi
-
----
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: nose
-spec:
-  description: Run nose tests
-  workspaces:
-    - name: source
-  params:
-    - name: args
-      description: arguments to pass to nose
-      type: string
-      default: "-v"
-  steps:
-    - name: nosetests
-      image: python:3.9-slim
-      workingDir: $(workspaces.source_path)
-      script: |
-          #!/bin/bash
-          set -e
-          python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt
-          nosetests $(params.args)
